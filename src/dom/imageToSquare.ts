@@ -3,12 +3,12 @@ import { createCanvas, createCanvasFromMedia } from './createCanvas';
 import { getContext2dOrThrow } from './getContext2dOrThrow';
 import { getMediaDimensions } from './getMediaDimensions';
 
-export function imageToSquare(input: HTMLImageElement | HTMLCanvasElement, inputSize: number, centerImage: boolean = false) {
+export function imageToSquare(input: HTMLImageElement | HTMLCanvasElement | ImageData, inputSize: number, centerImage: boolean = false) {
 
-  const { Image, Canvas } = env.getEnv()
+  const { Image, Canvas, ImageData } = env.getEnv()
 
-  if (!(input instanceof Image || input instanceof Canvas)) {
-    throw new Error('imageToSquare - expected arg0 to be HTMLImageElement | HTMLCanvasElement')
+  if (!(input instanceof Image || input instanceof Canvas || input instanceof ImageData)) {
+    throw new Error('imageToSquare - expected arg0 to be HTMLImageElement | HTMLCanvasElement | ImageData')
   }
 
   const dims = getMediaDimensions(input)

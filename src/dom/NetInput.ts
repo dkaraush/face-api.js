@@ -150,11 +150,11 @@ export class NetInput {
           return imgTensor.as3D(inputSize, inputSize, 3)
         }
 
-        if (input instanceof env.getEnv().Canvas) {
+        if (input instanceof env.getEnv().Canvas || input instanceof env.getEnv().ImageData) {
           return tf.browser.fromPixels(imageToSquare(input, inputSize, isCenterInputs))
         }
 
-        throw new Error(`toBatchTensor - at batchIdx ${batchIdx}, expected input to be instanceof tf.Tensor or instanceof HTMLCanvasElement, instead have ${input}`)
+        throw new Error(`toBatchTensor - at batchIdx ${batchIdx}, expected input to be instanceof tf.Tensor or instanceof HTMLCanvasElement or instanceof ImageData, instead have ${input}`)
       })
 
       const batchTensor = tf.stack(inputTensors.map(t => t.toFloat())).as4D(this.batchSize, inputSize, inputSize, 3)

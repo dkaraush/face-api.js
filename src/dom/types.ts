@@ -2,7 +2,7 @@ import * as tf from '@tensorflow/tfjs-core';
 
 import { NetInput } from './NetInput';
 
-export type TMediaElement = HTMLImageElement | HTMLVideoElement | HTMLCanvasElement
+export type TMediaElement = HTMLImageElement | HTMLVideoElement | HTMLCanvasElement | ImageData
 
 export type TResolvedNetInput = TMediaElement | tf.Tensor3D | tf.Tensor4D
 

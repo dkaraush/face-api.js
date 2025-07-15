@@ -7,10 +7,12 @@ import { computeReshapedDimensions, isTensor3D, isTensor4D, range } from '../uti
 import { createCanvasFromMedia } from './createCanvas';
 import { imageToSquare } from './imageToSquare';
 import { TResolvedNetInput } from './types';
+import { isImageData } from './isMediaElement';
 
 export class NetInput {
   private _imageTensors: Array<tf.Tensor3D | tf.Tensor4D> = []
   private _canvases: HTMLCanvasElement[] = []
+  private _imageDatas: ImageData[] = []
   private _batchSize: number
   private _treatAsBatchInput: boolean = false
 
@@ -47,6 +49,12 @@ export class NetInput {
         return
       }
 
+      if (isImageData(input)) {
+        this._imageDatas[idx] = input
+        this._inputDimensions[idx] = [input.width, input.height, 3]
+        return
+      }
+
       const canvas = input instanceof env.getEnv().Canvas ? input : createCanvasFromMedia(input)
       this._canvases[idx] = canvas
       this._inputDimensions[idx] = [canvas.height, canvas.width, 3]
@@ -59,6 +67,10 @@ export class NetInput {
 
   public get canvases(): HTMLCanvasElement[] {
     return this._canvases
+  }
+  
+  public get imageDatas(): ImageData[] {
+    return this._imageDatas
   }
 
   public get isBatchInput(): boolean {
@@ -83,8 +95,8 @@ export class NetInput {
     )
   }
 
-  public getInput(batchIdx: number): tf.Tensor3D  | tf.Tensor4D | HTMLCanvasElement {
-    return this.canvases[batchIdx] || this.imageTensors[batchIdx]
+  public getInput(batchIdx: number): tf.Tensor3D  | tf.Tensor4D | HTMLCanvasElement | ImageData {
+    return this._imageDatas[batchIdx] || this.canvases[batchIdx] || this.imageTensors[batchIdx]
   }
 
   public getInputDimensions(batchIdx: number): number[] {

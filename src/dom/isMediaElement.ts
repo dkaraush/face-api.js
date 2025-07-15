@@ -8,3 +8,9 @@ export function isMediaElement(input: any) {
     || input instanceof Canvas
     || input instanceof Video
 }
+
+export function isImageData(input: any) {
+  const { ImageData } = env.getEnv()
+
+  return input instanceof ImageData
+}

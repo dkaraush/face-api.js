@@ -1,6 +1,6 @@
 import { isTensor3D, isTensor4D } from '../utils';
 import { awaitMediaLoaded } from './awaitMediaLoaded';
-import { isMediaElement } from './isMediaElement';
+import { isMediaElement, isImageData } from './isMediaElement';
 import { NetInput } from './NetInput';
 import { resolveInput } from './resolveInput';
 import { TNetInput } from './types';
@@ -30,13 +30,13 @@ export async function toNetInput(inputs: TNetInput): Promise<NetInput> {
   const inputArray = inputArgArray.map(resolveInput)
 
   inputArray.forEach((input, i) => {
-    if (!isMediaElement(input) && !isTensor3D(input) && !isTensor4D(input)) {
+    if (!isMediaElement(input) && !isTensor3D(input) && !isTensor4D(input) && !isImageData(input)) {
 
       if (typeof inputArgArray[i] === 'string') {
         throw new Error(`toNetInput -${getIdxHint(i)} string passed, but could not resolve HTMLElement for element id ${inputArgArray[i]}`)
       }
 
-      throw new Error(`toNetInput -${getIdxHint(i)} expected media to be of type HTMLImageElement | HTMLVideoElement | HTMLCanvasElement | tf.Tensor3D, or to be an element id`)
+      throw new Error(`toNetInput -${getIdxHint(i)} expected media to be of type HTMLImageElement | HTMLVideoElement | HTMLCanvasElement | tf.Tensor3D | ImageData, or to be an element id`)
     }
 
     if (isTensor4D(input)) {

@@ -9,7 +9,7 @@ export function isMediaElement(input: any) {
     || input instanceof Video
 }
 
-export function isImageData(input: any) {
+export function isImageData(input: any): input is ImageData {
   const { ImageData } = env.getEnv()
 
   return input instanceof ImageData
